@@ -15,7 +15,12 @@ class Dam extends MY_Controller
 		$this->coin_name = "ifi";
 		$this->coin_id = $this->config->item('ifi_coin_id');
 		$this->chain_id = $this->config->item('ifi_chain_id');
-		$this->contract="0xB1F052E948A63b1c560D569BBd8501B6B6D0690a";
+		$this->rpc_url_pn = "http://18.216.66.9:8545";
+		$this->contract=$this->config->item("ifi_contract_address");//"0xB1F052E948A63b1c560D569BBd8501B6B6D0690a";
+		$this->chain_id_pn = "18888";
+		$this->gas=210000;
+		$this->gasLimit=8000000;
+		$this->gasPrice=0;//-1时根据web3.eth.getGasPrice()获取
 	}
 
 
@@ -85,6 +90,14 @@ class Dam extends MY_Controller
 		$data .= $upload . "\r\n";
 		$data .= "--" . static::$delimiter . "--\r\n";
 		return $data;
+	}
+
+	public function app_config()
+	{
+		$rpc_url=$this->config->item('ifiRPC_PN') == null ? $this->rpc_url_pn : $this->config->item('ifiRPC_PN');
+		$contract=$this->contract;
+		$rdata=array('status'=>1,'msg'=>'',"rpc_url"=>$rpc_url,'contract'=>$contract,'gas'=>$this->gas,'gasLimit'=>$this->gasLimit,'gasPrice'=>$this->gasPrice,'chain_id'=>$this->chain_id_pn);
+		$this->output->set_output(json_encode($rdata,true));
 	}
 
 	public function get_balance()
@@ -293,6 +306,7 @@ class Dam extends MY_Controller
 			$in=$this->psql->query("select IFNULL(SUM(cast(ifi_amount AS DECIMAL(30))),0) num from transactions_dam WHERE `to`='".$address."'")->row_array()['num'];
 			$out=$this->psql->query("select IFNULL(SUM(cast(ifi_amount AS DECIMAL(30))),0) num from transactions_dam WHERE `from`='".$address."'")->row_array()['num'];
 			$total_consumed=$total_reward+$in-$out-$blance;////消费总额可通过（总激励额 + 转入 - 转出 - 余额）简单计算，目前不要求精确数值。
+			if($total_consumed<0) $total_consumed=0;
 
 			$url = "http://api.ipstack.com/".$local_ip."?access_key=ce28c8d21809d0498fb2176b95addb7b&format=1";
 			$result = commit_curl($url);
@@ -302,8 +316,8 @@ class Dam extends MY_Controller
 			//$result=$this->psql->query("SELECT TIMESTAMPDIFF(SECOND,(SELECT b.startup_time FROM nodes_startup b WHERE a.owner_address=b.owner_address and a.chequebook_address=b.chequebook_address and a.local_ip=b.local_ip order by b.startup_time ASC LIMIT 1),last_updated) run_time,TIMESTAMPDIFF(SECOND,(SELECT b.startup_time FROM nodes_startup b WHERE a.owner_address=b.owner_address and a.chequebook_address=b.chequebook_address and a.local_ip=b.local_ip order by b.startup_time DESC LIMIT 1),last_updated) c_run_time FROM nodes a WHERE owner_address='".$address."' and chequebook_address='".$chequebook_address."' and local_ip='".$local_ip."'")->row_array();
 			$result=$this->psql->query("SELECT TIMESTAMPDIFF(SECOND,(SELECT b.startup_time FROM nodes_startup b WHERE a.owner_address=b.owner_address order by b.startup_time ASC LIMIT 1),last_updated) run_time,TIMESTAMPDIFF(SECOND,(SELECT b.startup_time FROM nodes_startup b WHERE a.owner_address=b.owner_address order by b.startup_time DESC LIMIT 1),last_updated) c_run_time FROM nodes a WHERE owner_address='".$address."'")->row_array();
 			if($result&&count($result)>0){
-				$tot=round($result['run_time']*1.0/60,2);
-				$cot=round($result['c_run_time']*1.0/60,2);
+				$tot=round($result['run_time']*1.0/60/60,2);
+				$cot=round($result['c_run_time']*1.0/60/60,2);
 			}
 		}
 		$rdata=array('status'=>1,'msg'=>'','total_reward'=>$total_reward,"total_consumed"=>$total_consumed,"location"=>$location,"status"=>$status,"tot"=>$tot,"cot"=>$cot);
@@ -320,8 +334,8 @@ class Dam extends MY_Controller
 		}
 		$start_row=($page_index-1)*$page_size;
 		$this->psql = $this->load->database('ette',true);
-		$total_result=$this->psql->query("select count(`log_id`) num from ifi_award_log where `from_account`='".$address."'")->row_array();
-		$result_array=$this->psql->query("select * from ifi_award_log where `from_account`='".$address."' order by `timestamp` desc limit ".$start_row.",".$page_size." ")->result_array();
+		$total_result=$this->psql->query("select count(`log_id`) num from ifi_award_log where `node_address`='".$address."'")->row_array();
+		$result_array=$this->psql->query("select b.`name` typeName,log_id,ifi_amount,`timestamp` from ifi_award_log a,ifi_award_type b where a.type=b.type and `node_address`='".$address."' order by `timestamp` desc limit ".$start_row.",".$page_size." ")->result_array();
 		$rdata=array('status'=>1,'msg'=>'','total'=>$total_result['num'],"data"=>$result_array);
 		$this->output->set_output(json_encode($rdata,true));
 	}
@@ -341,6 +355,12 @@ class Dam extends MY_Controller
 		$to = isset($input_data['to'])?$input_data['to']:"";
 		$ifi_amount = isset($input_data['ifi_amount'])?$input_data['ifi_amount']:"";
 		$timestamp = isset($input_data['timestamp'])?$input_data['timestamp']:"";
+		if($hash==""||$from==""||$to=="")
+		{
+			$rdata=array('status'=>0,'msg'=>'params error');
+			$this->output->set_output(json_encode($rdata,true));
+			return;
+		}
 		$this->psql = $this->load->database('ette',true);
 		$data = array(
 			'hash'  =>  $hash,
