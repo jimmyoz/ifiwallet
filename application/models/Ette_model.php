@@ -73,6 +73,38 @@ class Ette_model extends CI_Model {
     public function insert_block($data) {
         $this->psql->insert('blocks', $data);
     }
+	
+	public function insert_ifi_award_log($data) {
+        $this->psql->insert('ifi_award_log', $data);
+    }
+
+    public function isSended($data)
+    {
+        $this->psql->select('*');
+        $this->psql->from('idCodes');
+        $this->psql->where('idCode=', $data["idCode"]);
+        $this->psql->where('last_date=', $data["last_date"]);
+        $query = $this->psql->get();
+        $count = $query->num_rows();
+        if($count>0) return true;
+        return false;
+    }
+
+    public function insert_update_idCodes($data) {      
+        $this->psql->select('*');
+        $this->psql->from('idCodes');
+        $this->psql->where('idCode=', $data["idCode"]);
+        $query = $this->psql->get();
+        $count = $query->num_rows();
+       if($count==0) {
+        $this->psql->insert('idCodes', $data);
+       }
+       else {
+        $where=array("idCode"=>$data["idCode"]);
+        $data1=array("last_date"=>$data["last_date"]);
+        $this->psql->update('idCodes',$data1,$where);
+      }
+   }
 
     public function insert_transactions($data) {
         $this->psql->insert('transactions', $data);
@@ -271,6 +303,11 @@ class Ette_model extends CI_Model {
             // insert it
             $this->psql->insert('nodes', $data);
         }
+    }
+
+    public function insert_node_startup($data) {
+        // just insert it
+        $this->psql->insert('nodes_startup',$data);
     }
 
     public function get_node_number() {

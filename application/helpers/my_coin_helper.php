@@ -3,6 +3,10 @@
  * commit api for get and post 
  * 
  */
+ 
+function saveLog($data,$path){
+	file_put_contents($path, date('Y-m-d H:i:s')."  ".$data. PHP_EOL . PHP_EOL . PHP_EOL, FILE_APPEND); 
+		}
 function commit_curl($url,$get=true,$header=0,$odata=null,$user=null,$pass=null) {
             
             $ch = curl_init(); 

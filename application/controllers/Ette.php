@@ -95,6 +95,7 @@ class Ette extends MY_Controller {
                         'gaslimit'  =>  base_convert($block['gasLimit'],16,10),
                         'nonce' =>  base_convert($block['nonce'],16,10),
                         'miner' =>  $this->get_signers($blockNum),  // TO DO, in POA it is signer
+                       // 'miner' =>  $block['miner'], 
                         'size'  =>  base_convert($block['size'],16,10),
                         'stateroothash' =>  $block['stateRoot'],
                         'unclehash' =>  $block['sha3Uncles'],
@@ -110,12 +111,12 @@ class Ette extends MY_Controller {
                     if($has_block !== $block['hash']) {
                         $blockUpdate['hash'] = $block['hash'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
-                        $blockUpdate['miner'] = $this->get_signers($blockNum);
+                       // $blockUpdate['miner'] = $block['miner'];
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);
                         echo "\r\n block with hash ".$block['hash']." updated to db\r\n";
                     } else {
-                        $blockUpdate['miner'] = $this->get_signers($blockNum);
+                       // $blockUpdate['miner'] = $block['miner'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);

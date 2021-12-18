@@ -40,7 +40,8 @@ class MY_Controller extends CI_Controller {
                     $error = json_decode($out,true)['error'];
                     $error['method'] = $method;
                     $error['when'] = date('Y-m-d H:i:s');
-                    var_dump($error);
+                  //  var_dump($error);
+	             //saveLog(json_encode($error));
                     return $error;
                 }
                 
