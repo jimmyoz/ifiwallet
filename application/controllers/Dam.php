@@ -15,13 +15,18 @@ class Dam extends MY_Controller
 		$this->coin_name = "ifi";
 		$this->coin_id = $this->config->item('ifi_coin_id');
 		$this->chain_id = $this->config->item('ifi_chain_id');
+<<<<<<< HEAD
 		$this->rpc_url_pn = "http://18.216.66.9:8545";
 		$this->contract=$this->config->item("ifi_contract_address");//"0xB1F052E948A63b1c560D569BBd8501B6B6D0690a";
+=======
+		$this->contract="0x4D2f63d6826603B84D12C1C7dd33aB7F3BDe7553";
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
 	}
 
 
 	public function test()
 	{
+<<<<<<< HEAD
 		$imgfile=dirname(__FILE__)."/132.jpg";
 
 		// 目标接口
@@ -56,6 +61,8 @@ class Dam extends MY_Controller
 		$out = commit_curl("http://localhost:1633/v1/tags",true);
 		$this->output->set_output(json_encode($out,true));
 		return;
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
 		$input_data = json_decode(trim(file_get_contents('php://input')), true);
 		//$privateKey = isset($input_data['privateKey'])?$input_data['privateKey']:"";
 		//$util = new Util;
@@ -67,6 +74,7 @@ class Dam extends MY_Controller
 		$data= array('code'=>'1','msg'=>$input_data);
 		$this->output->set_output(json_encode($data,true));
 	}
+<<<<<<< HEAD
 	private function buildData($param){
 		$data = '';
 		$eol = "\r\n";
@@ -95,6 +103,8 @@ class Dam extends MY_Controller
 		$rdata=array('status'=>1,'msg'=>'',"rpc_url"=>$rpc_url,'contract'=>$contract,'gas'=>210000,'gasLimit'=>8000000,'gasPrice'=>0);
 		$this->output->set_output(json_encode($rdata,true));
 	}
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
 
 	public function get_balance()
 	{
@@ -125,10 +135,17 @@ class Dam extends MY_Controller
 		}
 		$result=hexdec($result);//weiToifi(hexdec($result))
 		$this->psql = $this->load->database('ette',true);
+<<<<<<< HEAD
 		$reward=$this->psql->query("select ifnull(sum(cast(total_reward AS DECIMAL(30))),0) num from nodes where owner_address='".$address_org."'")->row_array()['num'];
 		$in=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `to`='".$address_org."'")->row_array()['num'];
 		$out=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `from`='".$address_org."'")->row_array()['num'];
 		$consume=$reward+$in-$out-$result;
+=======
+		$consume=0;
+		$reward=$this->psql->query("select ifnull(sum(cast(total_reward AS DECIMAL(30))),0) num from nodes where owner_address='".$address_org."'")->row_array()['num'];
+		$in=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `to`='".$address_org."'")->row_array()['num'];
+		$out=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `from`='".$address_org."'")->row_array()['num'];
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
 		$rdata=array('status'=>1,'msg'=>'',"balance"=>$result,'reward'=>$reward,'consume'=>$consume,'in'=>$in,'out'=>$out);
 		$this->output->set_output(json_encode($rdata,true));
 	}
@@ -220,6 +237,7 @@ class Dam extends MY_Controller
 		$this->output->set_output(json_encode($out_arr,true));
 	}
 
+<<<<<<< HEAD
 	public function get_run_time() {
 		$run_time=0;
 		$current_run_time=0;
@@ -363,6 +381,8 @@ class Dam extends MY_Controller
 		$this->output->set_output(json_encode($rdata,true));
 	}
 
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
 	public function get_nonce($address) {
 		$method  = "eth_getTransactionCount";
 		$param = [$address,"latest"];
