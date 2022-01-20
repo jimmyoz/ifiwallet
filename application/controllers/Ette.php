@@ -95,7 +95,10 @@ class Ette extends MY_Controller {
                         'gaslimit'  =>  base_convert($block['gasLimit'],16,10),
                         'nonce' =>  base_convert($block['nonce'],16,10),
                         'miner' =>  $this->get_signers($blockNum),  // TO DO, in POA it is signer
+<<<<<<< HEAD
                        // 'miner' =>  $block['miner'], 
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
                         'size'  =>  base_convert($block['size'],16,10),
                         'stateroothash' =>  $block['stateRoot'],
                         'unclehash' =>  $block['sha3Uncles'],
@@ -111,13 +114,21 @@ class Ette extends MY_Controller {
                     if($has_block !== $block['hash']) {
                         $blockUpdate['hash'] = $block['hash'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
+<<<<<<< HEAD
                        // $blockUpdate['miner'] = $block['miner'];
+=======
+                        $blockUpdate['miner'] = $this->get_signers($blockNum);
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);
                         echo "\r\n block with hash ".$block['hash']." updated to db\r\n";
                     } else {
+<<<<<<< HEAD
                        // $blockUpdate['miner'] = $block['miner'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
+=======
+                        $blockUpdate['miner'] = $this->get_signers($blockNum);
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);
                         echo "\r\n block with hash ".$block['hash']." in db is correct, just update the miner \r\n";
@@ -342,8 +353,12 @@ class Ette extends MY_Controller {
         //更新节点数据
         public function update_nodes_info() {
             $nodes = $this->ette_model->get_nodes();
+<<<<<<< HEAD
             foreach($nodes[1] as $v) {
                 $incentive_reward =  $this->ette_model->get_incentive_reward($v['owner_address']);
+=======
+            foreach($nodes as $v) {
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
                 $total_award = $this->ette_model->get_award_by_node_time(0,$v['owner_address']);
                 $day30_award = $this->ette_model->get_award_by_node_time(time()-30*24*3600,$v['owner_address']);
                 $day60_award = $this->ette_model->get_award_by_node_time(time()-60*24*3600,$v['owner_address']);
@@ -356,13 +371,20 @@ class Ette extends MY_Controller {
                 }
                 // update nodes information
                 $data = array(
+<<<<<<< HEAD
                     'incentive_reward'  =>  $incentive_reward,
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
                     'total_reward'  =>  $total_award,
                     'reward_30days' =>  $day30_award,
                     'increase_ratio'   =>  $increase_ratio
                 );
                 $this->ette_model->update_node($data,array('owner_address'=>$v['owner_address']));
+<<<<<<< HEAD
                 echo "\r\n Update node information on owner address : ".$v['owner_address']."\r\n";
+=======
+                echo "\r\n Update node information on onwer address : ".$v['owner_address']."\r\n";
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
             }
         }
 
@@ -381,6 +403,7 @@ class Ette extends MY_Controller {
             $method  = "eth_blockNumber";
             $param = [];
             $result = $this->call($method,$param);
+<<<<<<< HEAD
             //var_dump($result);
             if(is_array($result)){
                exit("\r\n error when getting nonce \r\n");
@@ -388,6 +411,13 @@ class Ette extends MY_Controller {
             }
             $count = base_convert($result,16,10);
 	               // echo "\r\n best block : ".$count."\r\n";
+=======
+            if(is_array($result)){
+                exit("\r\n error when getting nonce \r\n");
+            }
+            $count = base_convert($result,16,10);
+            // echo "\r\n best block : ".$count."\r\n";
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
             return $count;
         }
 
@@ -398,7 +428,11 @@ class Ette extends MY_Controller {
             return $result;
         }
 
+<<<<<<< HEAD
         public function get_block1($num) {
+=======
+        public function get_block($num) {
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
             $method  = "eth_getBlockByNumber";
             $hex_num = "0x".base_convert($num,10,16);
             $param = [$hex_num,true];

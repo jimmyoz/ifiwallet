@@ -31,7 +31,11 @@ class MY_Controller extends CI_Controller {
                 "params"=> $params,
                 'id' =>time()
                 ];
+<<<<<<< HEAD
             }            
+=======
+            }
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
             $out = commit_curl($this->rpc_url,false,1,$odata,$this->rpc_user,$this->rpc_pass);
             if(isset(json_decode($out,true)['result'])){
                 return json_decode($out,true)['result'];

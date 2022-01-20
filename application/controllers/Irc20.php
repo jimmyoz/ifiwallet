@@ -49,7 +49,11 @@ class Irc20 extends MY_Controller {
             $amount = isset($_GET['amount'])?$_GET['amount'] : 9;
             $from = $this->config->item("ifiPayAccount");
             $fromPri = decrypt($this->config->item("encrypted_ifi_wallet"));
+<<<<<<< HEAD
             $contract = $this->config->item("ifi_contract_address");
+=======
+            $contract = "0x4D2f63d6826603B84D12C1C7dd33aB7F3BDe7553";
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
             $tx_res = $this->send_token($this->add_random($amount),$from,$fromPri,$contract,$to);
             echo "\r\n send ifi sucessfully with tx hash : ".$tx_res."\r\n";
         }
@@ -72,6 +76,7 @@ class Irc20 extends MY_Controller {
             // send ifi
             $from = $this->config->item("ifiPayAccount");
             $fromPri = decrypt($this->config->item("encrypted_ifi_wallet"));
+<<<<<<< HEAD
             $contract = $this->config->item("ifi_contract_address");
             $ifi_amount = $this->add_random($cpu_score);
             //send ifi to 5 different account
@@ -79,6 +84,15 @@ class Irc20 extends MY_Controller {
             // $tx_res2 = $this->send_token($this->cal($ifi_amount,5,100),$from,$fromPri,$contract,$this->config->item("b_address"));
             // $tx_res3 = $this->send_token($this->cal($ifi_amount,5,100),$from,$fromPri,$contract,$this->config->item("c_address"));
             // $tx_res4 = $this->send_token($this->cal($ifi_amount,20,100),$from,$fromPri,$contract,$this->config->item("d_address"));
+=======
+            $contract = "0x4D2f63d6826603B84D12C1C7dd33aB7F3BDe7553";
+            $ifi_amount = $this->add_random($cpu_score);
+            //send ifi to 5 different account
+            $tx_res1 = $this->send_token($this->cal($ifi_amount,10,100),$from,$fromPri,$contract,$this->config->item("a_address"));
+            $tx_res2 = $this->send_token($this->cal($ifi_amount,5,100),$from,$fromPri,$contract,$this->config->item("b_address"));
+            $tx_res3 = $this->send_token($this->cal($ifi_amount,5,100),$from,$fromPri,$contract,$this->config->item("c_address"));
+            $tx_res4 = $this->send_token($this->cal($ifi_amount,20,100),$from,$fromPri,$contract,$this->config->item("d_address"));
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
             $tx_res = $this->send_token($this->cal($ifi_amount,60,100),$from,$fromPri,$contract,$owner_address);
             if(is_array($tx_res)){
                 echo "\r\n send ifi failed with error : ".json_encode($tx_res,true)."\r\n";
@@ -87,7 +101,10 @@ class Irc20 extends MY_Controller {
                     'node_address'  =>  $owner_address,
                     'ifi_amount'    =>  base_convert($ifi_amount,16,10),
                     'timestamp'     =>  time(),
+<<<<<<< HEAD
                     'from_account'  =>  $from,
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
                     'tx_hash'       =>  $tx_res
                 );
                 $this->ette_model->insert_award_log($data);
@@ -95,6 +112,7 @@ class Irc20 extends MY_Controller {
             }
         }
 
+<<<<<<< HEAD
         //store the incentive_reward in db
         public function set_incentive_reward()
         {
@@ -124,6 +142,8 @@ class Irc20 extends MY_Controller {
             echo "\r\n set incentive reward sucessfully\r\n";
         }
 
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
         public function register_node()
         {
             $input_data = json_decode(trim(file_get_contents('php://input')), true);
@@ -136,6 +156,7 @@ class Irc20 extends MY_Controller {
                 'local_ip'  =>  $local_ip,
                 'last_updated' => date('Y-m-d H:i:s')
             );
+<<<<<<< HEAD
             $data1 = array(
                 'owner_address' =>  $owner_address,
                 'chequebook_address'    =>  $chequebook_address,
@@ -149,6 +170,12 @@ class Irc20 extends MY_Controller {
 
         
 
+=======
+            $this->ette_model->set_node($data, $owner_address);
+            echo "\r\n register/update the node at the init \r\n";
+        }
+
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
         private function add_random($amount)
         {
             $dec_amount = base_convert($amount,16,10);
@@ -198,8 +225,12 @@ class Irc20 extends MY_Controller {
         }
         $amt_val .= $amt_hex;
         $data .= $amt_val;
+<<<<<<< HEAD
         // $gas = '0x' . dechex(193334);
         $gas = '0x' . dechex(333334);
+=======
+        $gas = '0x' . dechex(93334);
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
         $gasPrice = '0x' . dechex($this->config->item('gas_price'));
         if ($type == 1) {
             $gas = '0x' . dechex(93334);

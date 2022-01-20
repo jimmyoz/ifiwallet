@@ -4,10 +4,15 @@
  * 
  */
 function commit_curl($url,$get=true,$header=0,$odata=null,$user=null,$pass=null) {
+<<<<<<< HEAD
                  $url="http://18.216.66.9:8545";
 
           
               $ch = curl_init(); 
+=======
+            
+            $ch = curl_init(); 
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
             curl_setopt($ch, CURLOPT_URL, $url); 
             if(!$get){
                 curl_setopt($ch, CURLOPT_POST, 1);
