@@ -3,6 +3,7 @@
  * commit api for get and post 
  * 
  */
+<<<<<<< HEAD
  
 function saveLog($data,$path){
 	file_put_contents($path, date('Y-m-d H:i:s')."  ".$data. PHP_EOL . PHP_EOL . PHP_EOL, FILE_APPEND); 
@@ -10,6 +11,18 @@ function saveLog($data,$path){
 function commit_curl($url,$get=true,$header=0,$odata=null,$user=null,$pass=null) {
             
             $ch = curl_init(); 
+=======
+function commit_curl($url,$get=true,$header=0,$odata=null,$user=null,$pass=null) {
+<<<<<<< HEAD
+                 $url="http://18.216.66.9:8545";
+
+          
+              $ch = curl_init(); 
+=======
+            
+            $ch = curl_init(); 
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
             curl_setopt($ch, CURLOPT_URL, $url); 
             if(!$get){
                 curl_setopt($ch, CURLOPT_POST, 1);

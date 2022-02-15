@@ -73,6 +73,7 @@ class Ette_model extends CI_Model {
     public function insert_block($data) {
         $this->psql->insert('blocks', $data);
     }
+<<<<<<< HEAD
 	
 	public function insert_ifi_award_log($data) {
         $this->psql->insert('ifi_award_log', $data);
@@ -105,6 +106,8 @@ class Ette_model extends CI_Model {
         $this->psql->update('idCodes',$data1,$where);
       }
    }
+=======
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 
     public function insert_transactions($data) {
         $this->psql->insert('transactions', $data);
@@ -268,6 +271,10 @@ class Ette_model extends CI_Model {
         $this->psql->where(['node_address'=>$node,'timestamp >=' => $start_time]);
         $res = $this->psql->get('ifi_award_log')->row();
         return $res->sum_amount;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
     }
     
     public function get_incentive_reward($node) {
@@ -275,6 +282,11 @@ class Ette_model extends CI_Model {
         $this->psql->where(['node_address'=>$node,'type' => 1]);
         $res = $this->psql->get('ifi_award_log')->row();
         return $res->sum_amount;
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
     } 
 
     public function update_node($data, $where) {
@@ -305,11 +317,20 @@ class Ette_model extends CI_Model {
         }
     }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
     public function insert_node_startup($data) {
         // just insert it
         $this->psql->insert('nodes_startup',$data);
     }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
     public function get_node_number() {
         $this->psql->select('id');
         $this->psql->from('nodes');

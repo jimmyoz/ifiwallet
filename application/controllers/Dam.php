@@ -15,17 +15,30 @@ class Dam extends MY_Controller
 		$this->coin_name = "ifi";
 		$this->coin_id = $this->config->item('ifi_coin_id');
 		$this->chain_id = $this->config->item('ifi_chain_id');
+<<<<<<< HEAD
 		$this->rpc_url_pn = "http://18.216.66.9:8545";
 		$this->contract=$this->config->item("ifi_contract_address");//"0xB1F052E948A63b1c560D569BBd8501B6B6D0690a";
 		$this->chain_id_pn = "18888";
 		$this->gas=210000;
 		$this->gasLimit=8000000;
 		$this->gasPrice=0;//-1时根据web3.eth.getGasPrice()获取
+=======
+<<<<<<< HEAD
+		$this->rpc_url_pn = "http://18.216.66.9:8545";
+		$this->contract=$this->config->item("ifi_contract_address");//"0xB1F052E948A63b1c560D569BBd8501B6B6D0690a";
+=======
+		$this->contract="0x4D2f63d6826603B84D12C1C7dd33aB7F3BDe7553";
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 	}
 
 
 	public function test()
 	{
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 		$imgfile=dirname(__FILE__)."/132.jpg";
 
 		// 目标接口
@@ -60,6 +73,11 @@ class Dam extends MY_Controller
 		$out = commit_curl("http://localhost:1633/v1/tags",true);
 		$this->output->set_output(json_encode($out,true));
 		return;
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 		$input_data = json_decode(trim(file_get_contents('php://input')), true);
 		//$privateKey = isset($input_data['privateKey'])?$input_data['privateKey']:"";
 		//$util = new Util;
@@ -71,6 +89,10 @@ class Dam extends MY_Controller
 		$data= array('code'=>'1','msg'=>$input_data);
 		$this->output->set_output(json_encode($data,true));
 	}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 	private function buildData($param){
 		$data = '';
 		$eol = "\r\n";
@@ -96,9 +118,17 @@ class Dam extends MY_Controller
 	{
 		$rpc_url=$this->config->item('ifiRPC_PN') == null ? $this->rpc_url_pn : $this->config->item('ifiRPC_PN');
 		$contract=$this->contract;
+<<<<<<< HEAD
 		$rdata=array('status'=>1,'msg'=>'',"rpc_url"=>$rpc_url,'contract'=>$contract,'gas'=>$this->gas,'gasLimit'=>$this->gasLimit,'gasPrice'=>$this->gasPrice,'chain_id'=>$this->chain_id_pn);
 		$this->output->set_output(json_encode($rdata,true));
 	}
+=======
+		$rdata=array('status'=>1,'msg'=>'',"rpc_url"=>$rpc_url,'contract'=>$contract,'gas'=>210000,'gasLimit'=>8000000,'gasPrice'=>0);
+		$this->output->set_output(json_encode($rdata,true));
+	}
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 
 	public function get_balance()
 	{
@@ -129,10 +159,23 @@ class Dam extends MY_Controller
 		}
 		$result=hexdec($result);//weiToifi(hexdec($result))
 		$this->psql = $this->load->database('ette',true);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 		$reward=$this->psql->query("select ifnull(sum(cast(total_reward AS DECIMAL(30))),0) num from nodes where owner_address='".$address_org."'")->row_array()['num'];
 		$in=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `to`='".$address_org."'")->row_array()['num'];
 		$out=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `from`='".$address_org."'")->row_array()['num'];
 		$consume=$reward+$in-$out-$result;
+<<<<<<< HEAD
+=======
+=======
+		$consume=0;
+		$reward=$this->psql->query("select ifnull(sum(cast(total_reward AS DECIMAL(30))),0) num from nodes where owner_address='".$address_org."'")->row_array()['num'];
+		$in=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `to`='".$address_org."'")->row_array()['num'];
+		$out=$this->psql->query("select IFNULL(SUM(cast(`value` AS DECIMAL(30))),0) num from transactions WHERE `from`='".$address_org."'")->row_array()['num'];
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 		$rdata=array('status'=>1,'msg'=>'',"balance"=>$result,'reward'=>$reward,'consume'=>$consume,'in'=>$in,'out'=>$out);
 		$this->output->set_output(json_encode($rdata,true));
 	}
@@ -224,6 +267,10 @@ class Dam extends MY_Controller
 		$this->output->set_output(json_encode($out_arr,true));
 	}
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 	public function get_run_time() {
 		$run_time=0;
 		$current_run_time=0;
@@ -306,7 +353,10 @@ class Dam extends MY_Controller
 			$in=$this->psql->query("select IFNULL(SUM(cast(ifi_amount AS DECIMAL(30))),0) num from transactions_dam WHERE `to`='".$address."'")->row_array()['num'];
 			$out=$this->psql->query("select IFNULL(SUM(cast(ifi_amount AS DECIMAL(30))),0) num from transactions_dam WHERE `from`='".$address."'")->row_array()['num'];
 			$total_consumed=$total_reward+$in-$out-$blance;////消费总额可通过（总激励额 + 转入 - 转出 - 余额）简单计算，目前不要求精确数值。
+<<<<<<< HEAD
 			if($total_consumed<0) $total_consumed=0;
+=======
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 
 			$url = "http://api.ipstack.com/".$local_ip."?access_key=ce28c8d21809d0498fb2176b95addb7b&format=1";
 			$result = commit_curl($url);
@@ -335,7 +385,11 @@ class Dam extends MY_Controller
 		$start_row=($page_index-1)*$page_size;
 		$this->psql = $this->load->database('ette',true);
 		$total_result=$this->psql->query("select count(`log_id`) num from ifi_award_log where `node_address`='".$address."'")->row_array();
+<<<<<<< HEAD
 		$result_array=$this->psql->query("select b.`name` typeName,log_id,ifi_amount,`timestamp` from ifi_award_log a,ifi_award_type b where a.type=b.type and `node_address`='".$address."' order by `timestamp` desc limit ".$start_row.",".$page_size." ")->result_array();
+=======
+		$result_array=$this->psql->query("select * from ifi_award_log where `node_address`='".$address."' order by `timestamp` desc limit ".$start_row.",".$page_size." ")->result_array();
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 		$rdata=array('status'=>1,'msg'=>'','total'=>$total_result['num'],"data"=>$result_array);
 		$this->output->set_output(json_encode($rdata,true));
 	}
@@ -355,12 +409,15 @@ class Dam extends MY_Controller
 		$to = isset($input_data['to'])?$input_data['to']:"";
 		$ifi_amount = isset($input_data['ifi_amount'])?$input_data['ifi_amount']:"";
 		$timestamp = isset($input_data['timestamp'])?$input_data['timestamp']:"";
+<<<<<<< HEAD
 		if($hash==""||$from==""||$to=="")
 		{
 			$rdata=array('status'=>0,'msg'=>'params error');
 			$this->output->set_output(json_encode($rdata,true));
 			return;
 		}
+=======
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 		$this->psql = $this->load->database('ette',true);
 		$data = array(
 			'hash'  =>  $hash,
@@ -374,6 +431,11 @@ class Dam extends MY_Controller
 		$this->output->set_output(json_encode($rdata,true));
 	}
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
+>>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
 	public function get_nonce($address) {
 		$method  = "eth_getTransactionCount";
 		$param = [$address,"latest"];
