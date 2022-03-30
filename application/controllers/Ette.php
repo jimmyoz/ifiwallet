@@ -39,7 +39,40 @@ class Ette extends MY_Controller {
             }
             
         }
+         public function get_nodes()
+        {
+          $input_data = json_decode(trim(file_get_contents('php://input')), true);
+          $current_page = isset($input_data['current_page'])?$input_data['current_page']:1;
+          $items_per_page = isset($input_data['items_per_page'])?$input_data['items_per_page']:15;
+          $data=$this->ette_model->get_active_nodes($current_page,$items_per_page);
+          
+         /* for($i=0;$i<$len;$i++)
+          {
 
+            $data[1][$i]["location"]='';//$this->get_location($data[1][$i]["local_ip"]);
+          }*/
+                    
+
+         $this->output->set_header("Access-Control-Allow-Origin: * ");
+            $this->output->set_output(json_encode($data,true));
+
+        }
+		
+		public function get_ifi_award_log()
+		{
+		   
+            $input_data = json_decode(trim(file_get_contents('php://input')), true);
+		  $address=	$input_data['address'];
+          $current_page = isset($input_data['current_page'])?$input_data['current_page']:1;
+          $items_per_page = isset($input_data['items_per_page'])?$input_data['items_per_page']:15;
+		  
+          $data=$this->ette_model->get_ifi_award_log($address,$current_page,$items_per_page);
+          
+          $this->output->set_header("Access-Control-Allow-Origin: * ");
+          $this->output->set_output(json_encode($data,true));
+             
+		}
+		
         // correct tx's blocknumber and timestamp
         public function correct_blocknumber() {
             $source = $this->ette_model->get_wrong_bn_txs();
@@ -95,6 +128,7 @@ class Ette extends MY_Controller {
                         'gaslimit'  =>  base_convert($block['gasLimit'],16,10),
                         'nonce' =>  base_convert($block['nonce'],16,10),
                         'miner' =>  $this->get_signers($blockNum),  // TO DO, in POA it is signer
+                       // 'miner' =>  $block['miner'], 
                         'size'  =>  base_convert($block['size'],16,10),
                         'stateroothash' =>  $block['stateRoot'],
                         'unclehash' =>  $block['sha3Uncles'],
@@ -110,12 +144,12 @@ class Ette extends MY_Controller {
                     if($has_block !== $block['hash']) {
                         $blockUpdate['hash'] = $block['hash'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
-                        $blockUpdate['miner'] = $this->get_signers($blockNum);
+                       // $blockUpdate['miner'] = $block['miner'];
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);
                         echo "\r\n block with hash ".$block['hash']." updated to db\r\n";
                     } else {
-                        $blockUpdate['miner'] = $this->get_signers($blockNum);
+                       // $blockUpdate['miner'] = $block['miner'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);
@@ -164,7 +198,6 @@ class Ette extends MY_Controller {
             $best_block = $this->get_best_block();
             $tx_count = $this->ette_model->get_tx_count();
             $signer_count = $this->ette_model->get_signers_count();
-            $init_time = 
             $data = array(
                 'block_height'  =>  $best_block,
                 'transactions'  =>  $tx_count,
@@ -177,14 +210,24 @@ class Ette extends MY_Controller {
             $this->output->set_header("Access-Control-Allow-Origin: * ");
             $this->output->set_output(json_encode($data,true));
         }
+		
+		public function get_transactions_count()
+		{
+			$count=$this->ette_model->get_trans_count();
+			$rs=array("trans_count"=>$count);
+			$this->output->set_header("Access-Control-Allow-Origin: * ");
+            $this->output->set_output(json_encode($rs,true));
+		}
+       
 
         public function get_transactions() {
-            $best_block = $this->get_best_block();
+           // $best_block = $this->get_best_block();
             $input_data = json_decode(trim(file_get_contents('php://input')), true);
-            $max_block = isset($input_data['max_block'])?$input_data['max_block']:$best_block;
+           // $max_block = isset($input_data['max_block'])?$input_data['max_block']:$best_block;
             $current_page = isset($input_data['current_page'])?$input_data['current_page']:1;
             $items_per_page = isset($input_data['items_per_page'])?$input_data['items_per_page']:15;
-            $res = $this->ette_model->get_trx($max_block,$current_page,$items_per_page);
+           // $res = $this->ette_model->get_trx($max_block,$current_page,$items_per_page);
+            $res = $this->ette_model->get_trx($current_page,$items_per_page);
             $data = $res[1];
             foreach($data as $k => $v) {
                 $data[$k]['age'] = time()-$v['timestamp'];
@@ -193,6 +236,9 @@ class Ette extends MY_Controller {
                 'total_records' =>  $res[0],
                 'data'  =>  $data
             );
+
+            unset($res);
+            unset($data);
             $this->output->set_header("Access-Control-Allow-Origin: * ");
             $this->output->set_output(json_encode($result,true));
         }
@@ -375,16 +421,20 @@ class Ette extends MY_Controller {
             $count = hexdec($result);
             return $count;
         }
+		
+
 
         public function get_best_block() {
             $method  = "eth_blockNumber";
             $param = [];
             $result = $this->call($method,$param);
+            //var_dump($result);
             if(is_array($result)){
-                exit("\r\n error when getting nonce \r\n");
+               exit("\r\n error when getting nonce \r\n");
+               // return  $result[0];
             }
             $count = base_convert($result,16,10);
-            // echo "\r\n best block : ".$count."\r\n";
+	               // echo "\r\n best block : ".$count."\r\n";
             return $count;
         }
 
@@ -395,7 +445,7 @@ class Ette extends MY_Controller {
             return $result;
         }
 
-        public function get_block($num) {
+        public function get_block1($num) {
             $method  = "eth_getBlockByNumber";
             $hex_num = "0x".base_convert($num,10,16);
             $param = [$hex_num,true];
