@@ -12,7 +12,45 @@ class Ette extends MY_Controller {
                 $this->coin_id = $this->config->item('ifi_coin_id');
                 $this->chain_id = $this->config->item('ifi_chain_id');
         }
+       
+        public function get_address_CSV()
+        {              
+               
+         //   $input_data = json_decode(trim(file_get_contents('php://input')), true);
+         //   $address = isset($input_data['address'])?$input_data['address']:"0x";
+         //   $current_page = isset($input_data['current_page'])?$input_data['current_page']:1;
+         //   $items_per_page = isset($input_data['items_per_page'])?$input_data['items_per_page']:15;
+         $address = isset($_GET['address'])?$_GET['address']:"0x";
+         $current_page = isset($_GET['current_page'])?$_GET['current_page']:1;
+         $items_per_page = isset($_GET['items_per_page'])?$_GET['items_per_page']:15;
 
+            $res = $this->ette_model->get_add_trx($current_page,$items_per_page,$address);
+            $list= $res[1];
+            foreach($list as $k => $v) {
+                $list[$k]['age'] = time() - $v['timestamp'];
+            }
+
+                     $filename='address_trx';
+                   header('Content-Type:application/octet-stream');//设置下载
+                    header("content-Disposition:filename=".$filename.".csv");
+                    $str="Tx Hash,Block,Age,From,To,Status\r";
+                   foreach($list as $row){
+                    $str.=$row['hash'].",";
+                    $str.=$row['blockNumber'].",";
+                    $str.=$row['age'].",";
+                    $str.=$row['from'].",";
+                    $str.=$row['to'].",";                
+                    $str.=($row['state']==1)?"Success\r" : "Failed\r";
+                    }
+                    $str=iconv('UTF-8',"GB2312//IGNORE",$str);
+                  
+                    exit($str);
+                  
+                   // $this->output->set_header("Access-Control-Allow-Origin: * ");
+                  // $this->output->set_header("Content-Type:application/octet-stream");
+                  //  $this->output->set_header("content-Disposition:filename=".$filename.".csv");
+                  // $this->output->set_output($str);
+        }
         
         public function test() {
             $result = $this->ette_model->get_test();
@@ -23,7 +61,13 @@ class Ette extends MY_Controller {
             }
             var_dump($arr);
         }
-
+        
+		public function get_summaryOfDay()
+		{ 
+			$data=$this->ette_model->get_summaryOfDay();
+            $this->output->set_header("Access-Control-Allow-Origin: * ");
+            $this->output->set_output(json_encode($data,true));
+		}
         public function correct_from() {
             $source = $this->ette_model->get_wrong_txs();
             $arr = array();
@@ -39,7 +83,54 @@ class Ette extends MY_Controller {
             }
             
         }
+         public function get_nodes()
+        {
+          $input_data = json_decode(trim(file_get_contents('php://input')), true);
+          $current_page = isset($input_data['current_page'])?$input_data['current_page']:1;
+          $items_per_page = isset($input_data['items_per_page'])?$input_data['items_per_page']:15;
+          $data=$this->ette_model->get_active_nodes($current_page,$items_per_page);
+          
+         /* for($i=0;$i<$len;$i++)
+          {
 
+            $data[1][$i]["location"]='';//$this->get_location($data[1][$i]["local_ip"]);
+          }*/
+                    
+
+         $this->output->set_header("Access-Control-Allow-Origin: * ");
+            $this->output->set_output(json_encode($data,true));
+
+        }
+
+
+        public function get_nodes_layui()
+        {   
+            $input_data = json_decode(trim(file_get_contents('php://input')), true);
+            $current_page = isset($_GET['page'])?$_GET['page']:1;
+            $items_per_page = isset($_GET['limit'])?$_GET['limit']:15;
+            $data=$this->ette_model->get_active_nodes($current_page,$items_per_page);
+             $data1=array("code"=>0,"msg"=>"返回成功","count"=>$data[1],"data"=>$data[2]);
+
+             $this->output->set_header("Access-Control-Allow-Origin: * ");
+             $this->output->set_output(json_encode($data1,true));
+      
+        }
+		
+		public function get_ifi_award_log()
+		{
+		   
+            $input_data = json_decode(trim(file_get_contents('php://input')), true);
+		  $address=	$input_data['address'];
+          $current_page = isset($input_data['current_page'])?$input_data['current_page']:1;
+          $items_per_page = isset($input_data['items_per_page'])?$input_data['items_per_page']:15;
+		  
+          $data=$this->ette_model->get_ifi_award_log($address,$current_page,$items_per_page);
+          
+          $this->output->set_header("Access-Control-Allow-Origin: * ");
+          $this->output->set_output(json_encode($data,true));
+             
+		}
+		
         // correct tx's blocknumber and timestamp
         public function correct_blocknumber() {
             $source = $this->ette_model->get_wrong_bn_txs();
@@ -95,14 +186,7 @@ class Ette extends MY_Controller {
                         'gaslimit'  =>  base_convert($block['gasLimit'],16,10),
                         'nonce' =>  base_convert($block['nonce'],16,10),
                         'miner' =>  $this->get_signers($blockNum),  // TO DO, in POA it is signer
-<<<<<<< HEAD
                        // 'miner' =>  $block['miner'], 
-=======
-<<<<<<< HEAD
-                       // 'miner' =>  $block['miner'], 
-=======
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
                         'size'  =>  base_convert($block['size'],16,10),
                         'stateroothash' =>  $block['stateRoot'],
                         'unclehash' =>  $block['sha3Uncles'],
@@ -118,30 +202,13 @@ class Ette extends MY_Controller {
                     if($has_block !== $block['hash']) {
                         $blockUpdate['hash'] = $block['hash'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
-<<<<<<< HEAD
                        // $blockUpdate['miner'] = $block['miner'];
-=======
-<<<<<<< HEAD
-                       // $blockUpdate['miner'] = $block['miner'];
-=======
-                        $blockUpdate['miner'] = $this->get_signers($blockNum);
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);
                         echo "\r\n block with hash ".$block['hash']." updated to db\r\n";
                     } else {
-<<<<<<< HEAD
                        // $blockUpdate['miner'] = $block['miner'];
                         $blockUpdate['tx_num'] = count($block['transactions']);
-=======
-<<<<<<< HEAD
-                       // $blockUpdate['miner'] = $block['miner'];
-                        $blockUpdate['tx_num'] = count($block['transactions']);
-=======
-                        $blockUpdate['miner'] = $this->get_signers($blockNum);
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
                         $blockWhere['number'] = $blockNum;
                         $this->ette_model->update_block($blockUpdate,$blockWhere);
                         echo "\r\n block with hash ".$block['hash']." in db is correct, just update the miner \r\n";
@@ -189,7 +256,6 @@ class Ette extends MY_Controller {
             $best_block = $this->get_best_block();
             $tx_count = $this->ette_model->get_tx_count();
             $signer_count = $this->ette_model->get_signers_count();
-            $init_time = 
             $data = array(
                 'block_height'  =>  $best_block,
                 'transactions'  =>  $tx_count,
@@ -202,14 +268,24 @@ class Ette extends MY_Controller {
             $this->output->set_header("Access-Control-Allow-Origin: * ");
             $this->output->set_output(json_encode($data,true));
         }
+		
+		public function get_transactions_count()
+		{
+			$count=$this->ette_model->get_trans_count();
+			$rs=array("trans_count"=>$count);
+			$this->output->set_header("Access-Control-Allow-Origin: * ");
+            $this->output->set_output(json_encode($rs,true));
+		}
+       
 
         public function get_transactions() {
-            $best_block = $this->get_best_block();
+           // $best_block = $this->get_best_block();
             $input_data = json_decode(trim(file_get_contents('php://input')), true);
-            $max_block = isset($input_data['max_block'])?$input_data['max_block']:$best_block;
+           // $max_block = isset($input_data['max_block'])?$input_data['max_block']:$best_block;
             $current_page = isset($input_data['current_page'])?$input_data['current_page']:1;
             $items_per_page = isset($input_data['items_per_page'])?$input_data['items_per_page']:15;
-            $res = $this->ette_model->get_trx($max_block,$current_page,$items_per_page);
+           // $res = $this->ette_model->get_trx($max_block,$current_page,$items_per_page);
+            $res = $this->ette_model->get_trx($current_page,$items_per_page);
             $data = $res[1];
             foreach($data as $k => $v) {
                 $data[$k]['age'] = time()-$v['timestamp'];
@@ -218,6 +294,9 @@ class Ette extends MY_Controller {
                 'total_records' =>  $res[0],
                 'data'  =>  $data
             );
+
+            unset($res);
+            unset($data);
             $this->output->set_header("Access-Control-Allow-Origin: * ");
             $this->output->set_output(json_encode($result,true));
         }
@@ -366,17 +445,8 @@ class Ette extends MY_Controller {
         //更新节点数据
         public function update_nodes_info() {
             $nodes = $this->ette_model->get_nodes();
-<<<<<<< HEAD
             foreach($nodes[1] as $v) {
                 $incentive_reward =  $this->ette_model->get_incentive_reward($v['owner_address']);
-=======
-<<<<<<< HEAD
-            foreach($nodes[1] as $v) {
-                $incentive_reward =  $this->ette_model->get_incentive_reward($v['owner_address']);
-=======
-            foreach($nodes as $v) {
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
                 $total_award = $this->ette_model->get_award_by_node_time(0,$v['owner_address']);
                 $day30_award = $this->ette_model->get_award_by_node_time(time()-30*24*3600,$v['owner_address']);
                 $day60_award = $this->ette_model->get_award_by_node_time(time()-60*24*3600,$v['owner_address']);
@@ -389,28 +459,13 @@ class Ette extends MY_Controller {
                 }
                 // update nodes information
                 $data = array(
-<<<<<<< HEAD
                     'incentive_reward'  =>  $incentive_reward,
-=======
-<<<<<<< HEAD
-                    'incentive_reward'  =>  $incentive_reward,
-=======
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
                     'total_reward'  =>  $total_award,
                     'reward_30days' =>  $day30_award,
                     'increase_ratio'   =>  $increase_ratio
                 );
                 $this->ette_model->update_node($data,array('owner_address'=>$v['owner_address']));
-<<<<<<< HEAD
                 echo "\r\n Update node information on owner address : ".$v['owner_address']."\r\n";
-=======
-<<<<<<< HEAD
-                echo "\r\n Update node information on owner address : ".$v['owner_address']."\r\n";
-=======
-                echo "\r\n Update node information on onwer address : ".$v['owner_address']."\r\n";
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
             }
         }
 
@@ -424,14 +479,13 @@ class Ette extends MY_Controller {
             $count = hexdec($result);
             return $count;
         }
+		
+
 
         public function get_best_block() {
             $method  = "eth_blockNumber";
             $param = [];
             $result = $this->call($method,$param);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
             //var_dump($result);
             if(is_array($result)){
                exit("\r\n error when getting nonce \r\n");
@@ -439,17 +493,6 @@ class Ette extends MY_Controller {
             }
             $count = base_convert($result,16,10);
 	               // echo "\r\n best block : ".$count."\r\n";
-=======
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
-            if(is_array($result)){
-                exit("\r\n error when getting nonce \r\n");
-            }
-            $count = base_convert($result,16,10);
-            // echo "\r\n best block : ".$count."\r\n";
-<<<<<<< HEAD
-=======
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
             return $count;
         }
 
@@ -460,22 +503,14 @@ class Ette extends MY_Controller {
             return $result;
         }
 
-<<<<<<< HEAD
-        public function get_block($num) {
-=======
-<<<<<<< HEAD
         public function get_block1($num) {
-=======
-        public function get_block($num) {
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
             $method  = "eth_getBlockByNumber";
             $hex_num = "0x".base_convert($num,10,16);
             $param = [$hex_num,true];
             $result = $this->call($method,$param);
             return $result;
         }
-
+           
 
         private function get_balance($address) {
             $method="eth_getBalance";
@@ -511,6 +546,8 @@ class Ette extends MY_Controller {
                 return false;
             }
         }
+		
+		
 }
 
 
