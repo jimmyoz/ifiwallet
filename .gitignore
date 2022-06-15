@@ -30,9 +30,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/tests/
 /tests/results/
 
-# Config files
-application/config
-application/config
 
 # Third Parties
 application/third_party/ethereum-tx/vendor/
