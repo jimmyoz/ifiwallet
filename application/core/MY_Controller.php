@@ -31,15 +31,7 @@ class MY_Controller extends CI_Controller {
                 "params"=> $params,
                 'id' =>time()
                 ];
-<<<<<<< HEAD
-            }
-=======
-<<<<<<< HEAD
             }            
-=======
-            }
->>>>>>> db6fde4a1ca71cfd4df0fc7842e417dabdfda373
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
             $out = commit_curl($this->rpc_url,false,1,$odata,$this->rpc_user,$this->rpc_pass);
             if(isset(json_decode($out,true)['result'])){
                 return json_decode($out,true)['result'];
@@ -48,17 +40,18 @@ class MY_Controller extends CI_Controller {
                     $error = json_decode($out,true)['error'];
                     $error['method'] = $method;
                     $error['when'] = date('Y-m-d H:i:s');
-<<<<<<< HEAD
                   //  var_dump($error);
-	             //saveLog(json_encode($error));
-=======
-                    var_dump($error);
->>>>>>> 11d9bc3a6414f2ab27633809a47f053080ba970e
                     return $error;
                 }
                 
             }
         }
+         protected    function hexToStr($hex){
+         $str="";
+         for($i=0;$i<strlen($hex)-1;$i+=2)
+         $str.=chr(hexdec($hex[$i].$hex[$i+1]));
+         return $str;
+         }
         
         protected function callLocal($method, $params=NULL) {
             if(empty($params)){
