@@ -1,318 +1,482 @@
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
+-- MySQL dump 10.13  Distrib 8.0.28, for Linux (x86_64)
 --
--- 主机： localhost
--- 生成日期： 2021-08-14 18:12:22
--- 服务器版本： 5.7.35
--- PHP 版本： 7.2.34
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: localhost    Database: ette
+-- ------------------------------------------------------
+-- Server version	8.0.28
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- 数据库： `ette`
+-- Table structure for table `bee_files`
 --
 
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `bee_files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bee_files` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `hash` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `filename` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `suffix` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `key` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `add_time` int DEFAULT NULL,
+  `filesize` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `ip` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `blocks`
+-- Table structure for table `blocks`
 --
 
+DROP TABLE IF EXISTS `blocks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `blocks` (
-  `hash` char(66) NOT NULL,
-  `number` bigint(20) NOT NULL,
-  `time` bigint(20) NOT NULL,
-  `parenthash` char(66) NOT NULL,
-  `difficulty` varchar(255) NOT NULL,
-  `gasused` bigint(20) NOT NULL,
-  `gaslimit` bigint(20) NOT NULL,
-  `nonce` varchar(255) NOT NULL,
-  `miner` char(42) NOT NULL,
+  `hash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `number` bigint NOT NULL,
+  `time` bigint NOT NULL,
+  `parenthash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `difficulty` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `gasused` bigint NOT NULL,
+  `gaslimit` bigint NOT NULL,
+  `nonce` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `miner` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `size` float NOT NULL,
-  `stateroothash` char(66) NOT NULL,
-  `unclehash` char(66) NOT NULL,
-  `txroothash` char(66) NOT NULL,
-  `receiptroothash` char(66) NOT NULL,
+  `stateroothash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `unclehash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `txroothash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `receiptroothash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `extradata` blob,
   `inputdata` blob,
-  `tx_num` int(10) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+  `tx_num` int NOT NULL,
+  PRIMARY KEY (`hash`) USING BTREE,
+  UNIQUE KEY `number` (`number`) USING BTREE,
+  UNIQUE KEY `number_2` (`number`) USING BTREE,
+  KEY `idx_blocks_number` (`number`) USING BTREE,
+  KEY `idx_blocks_time` (`time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `config_vars`
+-- Table structure for table `city_names`
 --
 
+DROP TABLE IF EXISTS `city_names`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `city_names` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `City` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `City_Admaster` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `City_EN` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Province` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Province_EN` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Region` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Tier` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=828 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `config_vars`
+--
+
+DROP TABLE IF EXISTS `config_vars`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `config_vars` (
-  `id` int(11) NOT NULL,
-  `name` varchar(25) NOT NULL,
-  `value` varchar(125) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `value` varchar(125) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 转存表中的数据 `config_vars`
+-- Table structure for table `delivery_history`
 --
 
-INSERT INTO `config_vars` (`id`, `name`, `value`) VALUES
-(1, 'next_check_block', '235667');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `delivery_history`
---
-
+DROP TABLE IF EXISTS `delivery_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `delivery_history` (
-  `id` char(36) DEFAULT NULL,
-  `client` char(42) NOT NULL,
+  `id` char(36) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `client` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `endpoint` varchar(255) NOT NULL,
-  `datalength` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+  `endpoint` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `datalength` bigint NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `events`
+-- Table structure for table `events`
 --
 
+DROP TABLE IF EXISTS `events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `events` (
-  `origin` char(42) NOT NULL,
-  `index` bigint(20) NOT NULL,
-  `topics` tinytext NOT NULL,
+  `origin` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `index` bigint NOT NULL,
+  `topics` blob,
   `data` blob,
-  `txhash` char(66) NOT NULL,
-  `blockhash` char(66) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+  `txhash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `blockhash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  KEY `idx_events_origin` (`origin`) USING BTREE,
+  KEY `idx_events_transaction_hash` (`txhash`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `nodes`
+-- Table structure for table `idCodes`
 --
 
+DROP TABLE IF EXISTS `idCodes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `idCodes` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `last_date` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `idCode` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ifi_award_counts`
+--
+
+DROP TABLE IF EXISTS `ifi_award_counts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ifi_award_counts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `times` int NOT NULL DEFAULT '0',
+  `last_updated` datetime NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `address` (`address`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ifi_award_log`
+--
+
+DROP TABLE IF EXISTS `ifi_award_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ifi_award_log` (
+  `log_id` int NOT NULL AUTO_INCREMENT,
+  `node_address` varchar(55) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL COMMENT '节点地址',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0来源于CPU，1来源于voyager提现',
+  `from_account` varchar(55) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '激励来源账号',
+  `ifi_amount` bigint DEFAULT NULL COMMENT '奖励数量',
+  `timestamp` int DEFAULT NULL COMMENT '时间戳',
+  `tx_hash` varchar(88) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL COMMENT '交易哈希',
+  `ifi_balance` double DEFAULT '0',
+  `status` int DEFAULT '0',
+  PRIMARY KEY (`log_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=307393 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_nodes` AFTER INSERT ON `ifi_award_log` FOR EACH ROW begin
+
+update nodes set total_reward=total_reward+new.ifi_amount,last_updated=current_timestamp()  where owner_address=new.node_address;
+
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `ifi_award_type`
+--
+
+DROP TABLE IF EXISTS `ifi_award_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ifi_award_type` (
+  `type` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ifi_transfer_records`
+--
+
+DROP TABLE IF EXISTS `ifi_transfer_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ifi_transfer_records` (
+  `blockNumber` int NOT NULL,
+  `transactionIndex` int NOT NULL,
+  `contractAddress` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `logIndex` int NOT NULL,
+  `from` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `to` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `value` double NOT NULL,
+  PRIMARY KEY (`blockNumber`,`transactionIndex`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `nodes`
+--
+
+DROP TABLE IF EXISTS `nodes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `nodes` (
-  `id` int(11) NOT NULL,
-  `owner_address` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `chequebook_address` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `cpu_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `cpu_score` int(11) NOT NULL DEFAULT '0',
-  `local_ip` varchar(55) CHARACTER SET utf8 DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `owner_address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `chequebook_address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `cpu_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `cpu_score` bigint DEFAULT NULL,
+  `local_ip` varchar(55) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `incentive_reward` bigint NOT NULL DEFAULT '0' COMMENT 'voyager提现奖励',
+  `total_reward` double NOT NULL DEFAULT '0' COMMENT '总奖励数量',
+  `reward_30days` bigint NOT NULL DEFAULT '0' COMMENT '30天内奖励数量',
+  `increase_ratio` int NOT NULL DEFAULT '0' COMMENT '增长幅度',
   `status` tinyint(1) NOT NULL DEFAULT '1',
-  `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `location` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '',
+  `logicalScore` double DEFAULT '0',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 转存表中的数据 `nodes`
+-- Table structure for table `nodes_startup`
 --
 
-INSERT INTO `nodes` (`id`, `owner_address`, `chequebook_address`, `cpu_name`, `cpu_score`, `local_ip`, `status`, `last_updated`) VALUES
-(1, '0xad53d6291353280458e04a63006f1e0484623b8f', '0x302d47dc68536ef28a2221b61b39d4048e217f37', NULL, 0, '47.52.211.206', 1, '2021-08-10 06:58:45'),
-(2, '0x444af7c95c951ab8b382c8283da3ddd87450dd60', '0x4bbabc4486c1d1e9192e7906406f80ba58db6b83', 'Intel(R) Xeon(R) Platinum 8163 CPU @ 2.50GHz', 164296704, '47.52.211.206', 1, '2021-08-10 15:42:35'),
-(3, '0xbed13479c186003fdf2dfc932c3467e7e4431a0e', '0xbc5ad86455b2f74b459576d3cd7dec91d88beb1d', 'Intel(R) Xeon(R) Platinum 8163 CPU @ 2.50GHz', 164296704, '47.52.211.206', 1, '2021-08-11 21:50:59');
-
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `nodes_startup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `nodes_startup` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `owner_address` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `chequebook_address` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `local_ip` varchar(55) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `startup_time` datetime NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `index_owner_address` (`owner_address`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=181809 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `signers`
+-- Table structure for table `other_accounts`
 --
 
+DROP TABLE IF EXISTS `other_accounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `other_accounts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `type` int NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) DEFAULT NULL,
+  `updated_at` datetime(3) DEFAULT NULL,
+  `deleted_at` datetime(3) DEFAULT NULL,
+  `code` longtext,
+  `price` bigint unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_product_deleted_at` (`deleted_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signers`
+--
+
+DROP TABLE IF EXISTS `signers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `signers` (
-  `id` int(11) NOT NULL,
-  `address` varchar(78) NOT NULL,
-  `ip` varchar(32) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `address` varchar(78) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `ip` varchar(32) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `min_block` bigint NOT NULL DEFAULT '0' COMMENT '最小签名区块',
+  `max_block` bigint NOT NULL DEFAULT '0' COMMENT '最大签名区块',
+  `days7` bigint NOT NULL DEFAULT '0' COMMENT '7天内签名区块数量',
+  `days30` bigint NOT NULL DEFAULT '0' COMMENT '30天内签名区块数量',
+  `total_blocks` int NOT NULL DEFAULT '0' COMMENT '签名区块的总数量',
+  `latitude` varchar(55) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `longitude` varchar(55) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `created_time` datetime NOT NULL,
-  `country` varchar(55) NOT NULL,
-  `status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `country` varchar(55) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `weight` double NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`) USING BTREE,
+  CONSTRAINT `signers_con1` CHECK ((`weight` >= 0))
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 转存表中的数据 `signers`
+-- Table structure for table `subscription_details`
 --
 
-INSERT INTO `signers` (`id`, `address`, `ip`, `created_time`, `country`, `status`) VALUES
-(1, '0x00ac220f8c2aebb70b7844fb5cd4b0d13b14d228', '127.0.0.1', '2021-08-11 22:44:46', 'South Korea', 1),
-(2, '0x07a239bca16674b91daf46a070e25380d92b75e4', '127.0.0.1', '2021-08-11 22:45:32', 'South Korea', 1),
-(3, '0x7ea05a75a46ed507171ce75e4b22be0655e15fa6', '127.0.0.1', '2021-08-11 22:45:58', 'Singapore', 1),
-(4, '0xeca06e789d57c884495c8232b0e59d43c97d3235', '127.0.0.1', '2021-08-11 22:46:29', 'USA', 1);
-
--- --------------------------------------------------------
-
---
--- 表的结构 `subscription_details`
---
-
+DROP TABLE IF EXISTS `subscription_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscription_details` (
-  `address` char(42) NOT NULL,
-  `subscriptionplan` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+  `address` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `subscriptionplan` int NOT NULL,
+  PRIMARY KEY (`address`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `subscription_plans`
+-- Table structure for table `subscription_plans`
 --
 
+DROP TABLE IF EXISTS `subscription_plans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscription_plans` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `deliverycount` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `deliverycount` bigint NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `id` (`id`) USING BTREE,
+  UNIQUE KEY `name` (`name`) USING BTREE,
+  UNIQUE KEY `deliverycount` (`deliverycount`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `transactions`
+-- Table structure for table `summaryOfDay`
 --
 
+DROP TABLE IF EXISTS `summaryOfDay`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `summaryOfDay` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `trxCount` int NOT NULL DEFAULT '0',
+  `accountsCount` int NOT NULL DEFAULT '0',
+  `accountsIFI` int NOT NULL DEFAULT '0',
+  `nodesCount` int NOT NULL DEFAULT '0',
+  `nodesOnline` int NOT NULL DEFAULT '0',
+  `givenIFI` double NOT NULL DEFAULT '0',
+  `nodesNew` int NOT NULL DEFAULT '0',
+  `totalScore` double NOT NULL DEFAULT '0',
+  `dt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `transactions`
+--
+
+DROP TABLE IF EXISTS `transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transactions` (
-  `hash` char(66) NOT NULL,
-  `from` char(42) NOT NULL,
-  `to` char(42) DEFAULT NULL,
-  `contract` char(42) DEFAULT NULL,
-  `value` varchar(255) DEFAULT NULL,
+  `hash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `from` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `to` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `contract` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `data` blob,
-  `input_data` text,
-  `gas` bigint(20) NOT NULL,
-  `gasprice` varchar(255) NOT NULL,
-  `cost` varchar(255) NOT NULL,
-  `nonce` bigint(20) NOT NULL,
-  `state` smallint(6) NOT NULL,
-  `blockhash` char(66) NOT NULL,
-  `blockNumber` bigint(20) NOT NULL DEFAULT '0',
-  `timestamp` bigint(20) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+  `input_data` text CHARACTER SET utf8 COLLATE utf8_general_ci,
+  `gas` bigint NOT NULL,
+  `gasprice` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `cost` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nonce` bigint NOT NULL,
+  `state` smallint NOT NULL,
+  `blockhash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `blockNumber` bigint NOT NULL DEFAULT '0',
+  `timestamp` int DEFAULT NULL,
+  PRIMARY KEY (`hash`) USING BTREE,
+  KEY `idx_transactions_from` (`from`) USING BTREE,
+  KEY `idx_transactions_to` (`to`) USING BTREE,
+  KEY `idx_transactions_contract` (`contract`) USING BTREE,
+  KEY `idx_transactions_nonce` (`nonce`) USING BTREE,
+  KEY `idx_transactions_block_hash` (`blockhash`) USING BTREE,
+  KEY `time_index` (`timestamp`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- 表的结构 `users`
+-- Table structure for table `transactions_dam`
 --
 
+DROP TABLE IF EXISTS `transactions_dam`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transactions_dam` (
+  `hash` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `from` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `to` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `ifi_amount` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `timestamp` int DEFAULT NULL,
+  PRIMARY KEY (`hash`) USING BTREE,
+  KEY `idx_transactions_dam_from` (`from`) USING BTREE,
+  KEY `idx_transactions_dam_to` (`to`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `address` char(42) NOT NULL,
-  `apikey` char(66) NOT NULL,
+  `address` char(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `apikey` char(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `enabled` tinyint(1) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `enabled` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`apikey`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- 转存表中的数据 `users`
---
-
-INSERT INTO `users` (`address`, `apikey`, `ts`, `enabled`) VALUES
-('0x4493Ea4F6c7d25d13B15b06C7694C1a97213Db3c', '0x51d9a52d29c99b6bde0f118fdd829097d18a9f041fc6fa661ace13cb93b7f389', '2021-08-01 10:18:27', 1);
-
---
--- 转储表的索引
---
-
---
--- 表的索引 `blocks`
---
-ALTER TABLE `blocks`
-  ADD PRIMARY KEY (`hash`),
-  ADD UNIQUE KEY `number` (`number`),
-  ADD UNIQUE KEY `number_2` (`number`),
-  ADD KEY `idx_blocks_number` (`number`),
-  ADD KEY `idx_blocks_time` (`time`);
-
---
--- 表的索引 `config_vars`
---
-ALTER TABLE `config_vars`
-  ADD PRIMARY KEY (`id`);
-
---
--- 表的索引 `events`
---
-ALTER TABLE `events`
-  ADD KEY `idx_events_origin` (`origin`),
-  ADD KEY `idx_events_transaction_hash` (`txhash`);
-
---
--- 表的索引 `nodes`
---
-ALTER TABLE `nodes`
-  ADD PRIMARY KEY (`id`);
-
---
--- 表的索引 `signers`
---
-ALTER TABLE `signers`
-  ADD PRIMARY KEY (`id`);
-
---
--- 表的索引 `subscription_details`
---
-ALTER TABLE `subscription_details`
-  ADD PRIMARY KEY (`address`);
-
---
--- 表的索引 `subscription_plans`
---
-ALTER TABLE `subscription_plans`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD UNIQUE KEY `name` (`name`),
-  ADD UNIQUE KEY `deliverycount` (`deliverycount`);
-
---
--- 表的索引 `transactions`
---
-ALTER TABLE `transactions`
-  ADD PRIMARY KEY (`hash`),
-  ADD KEY `idx_transactions_from` (`from`),
-  ADD KEY `idx_transactions_to` (`to`),
-  ADD KEY `idx_transactions_contract` (`contract`),
-  ADD KEY `idx_transactions_nonce` (`nonce`),
-  ADD KEY `idx_transactions_block_hash` (`blockhash`);
-
---
--- 表的索引 `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`apikey`);
-
---
--- 在导出的表使用AUTO_INCREMENT
---
-
---
--- 使用表AUTO_INCREMENT `config_vars`
---
-ALTER TABLE `config_vars`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- 使用表AUTO_INCREMENT `nodes`
---
-ALTER TABLE `nodes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- 使用表AUTO_INCREMENT `signers`
---
-ALTER TABLE `signers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- 使用表AUTO_INCREMENT `subscription_plans`
---
-ALTER TABLE `subscription_plans`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-06-21  7:44:02
